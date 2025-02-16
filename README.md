@@ -111,41 +111,68 @@ if __name__ == "__main__": #Función principal
 2. Desarrolle un programa que permita realizar el [producto de matrices](https://es.wikipedia.org/wiki/Multiplicaci%C3%B3n_de_matrices). El programa debe validar las condiciones necesarias para ejecutar la operación.
 
 ```python
-def ingresar_matriz(): #Función para el ingreso de la matriz
-    filas = int(input("Ingresa el número de filas de la matriz: ")) #ingreso de filas
-    columnas = int(input("Ingresa el número de columnas de la matriz: ")) #Ingreso de columnas
-    matriz = [] #Lista vacia apara acumular la matriz
+def imprimir_matriz(matriz):  #Funcion para mostrar la matriz como se debe ver
+    for fila in matriz:
+        print(fila)
 
-    for i in range(filas): #Ingre
-        fila = list(map(int, input(f"Ingresar los elementos de la fila {i + 1}, separados por espacios: ").split()))
-        matriz.append(fila)  # Añadir la fila a la matriz
-    
-    # Devolver la matriz ingresada por el usuario
+def ingresar_matriz(filas, columnas):  #Funcion para ingresar las matrices por consola
+    matriz = []  #Lista vacia donde se almacenara la matriz ingresada
+    print(f"Ingrese los elementos de la matriz {filas}x{columnas}:")
+    for i in range(filas):  #Rango para las filas
+        fila = []  #Lista vacia donde se almacenara cada fila
+        for j in range(columnas):  #Rango para las columnas, recorre cada fila con un número determinado de iteraciones
+            valor = float(input(f"Elemento [{i+1}][{j+1}]: "))  #Ingreso del valor de cada elemento de acuerdo a su posición en la matriz
+            fila.append(valor)  #Añade el valor al final de la fila
+        matriz.append(fila)  #Añade cada fila a la matriz
     return matriz
 
-def suma_columna(matriz, columna):
-    # Inicializar la variable suma a 0
-    suma = 0
+def multiplicar_matrices(matriz1, matriz2):  #Funcion para multiplicar las dos matrices
+    filas_m1 = len(matriz1)
+    columnas_m1 = len(matriz1[0])
+    filas_m2 = len(matriz2)
+    columnas_m2 = len(matriz2[0])
     
-    # Recorrer cada fila de la matriz y sumar los elementos de la columna especificada
-    for fila in matriz:
-        suma += fila[columna]
+    if columnas_m1 != filas_m2: #Aqui se verifica si las dimensiones son compatibles para la multiplicacion
+        print("No se puede multiplicar las matrices, el número de columnas de la primera matriz debe ser igual al número de filas de la segunda matriz.")
+        return None
     
-    # Devolver la suma de los elementos de la columna
-    return suma
+    resultado = [[0 for _ in range(columnas_m2)] for _ in range(filas_m1)] #Crear una matriz de resultado con las dimensiones correctas
+    
+    for i in range(filas_m1): #Realizar el producto de las dos matrices
+        for j in range(columnas_m2):
+            for k in range(columnas_m1): 
+                resultado[i][j] += matriz1[i][k] * matriz2[k][j]
+    
+    return resultado
 
 if __name__ == "__main__":
-    # Llamar a la función ingresar_matriz para obtener la matriz del usuario
-    matriz = ingresar_matriz()
+
+    filas_m1 = int(input("Ingrese el número de filas para la primera matriz: ")) #Ingreso de las filas de la primera matriz
+    columnas_m1 = int(input("Ingrese el número de columnas para la primera matriz: ")) #Ingreso de las columnas de la primera matriz
     
-    # Pedir al usuario el índice de la columna que desea sumar
-    columna = int(input("Ingresa el índice de la columna que deseas sumar (indexada desde 0): "))
+    filas_m2 = int(input("Ingrese el número de filas para la segunda matriz: ")) #Ingreso de las filas de la segunda matriz
+    columnas_m2 = int(input("Ingrese el número de columnas para la segunda matriz: ")) #Ingreso de las columnas de la segunda matriz
     
-    # Llamar a la función suma_columna para calcular la suma de la columna especificada
-    resultado = suma_columna(matriz, columna)
-    
-    # Imprimir el resultado
-    print(f'La suma de los elementos de la columna {columna} es: {resultado}')
+    if columnas_m1 != filas_m2: #Verificacion de si las matrices se pueden multiplicar
+        print("Las matrices no son compatibles para multiplicarse.")
+    else:
+        print("Ingresa la primera matriz:")
+        matriz1 = ingresar_matriz(filas_m1, columnas_m1) #Ingresamos la primera matriz
+        
+        print("Ingresa la segunda matriz:")
+        matriz2 = ingresar_matriz(filas_m2, columnas_m2)  #Ingresamos la segunda matriz
+        
+        print("Matriz 1:")
+        imprimir_matriz(matriz1) #Imprimimos la primera matriz
+        
+        print("Matriz 2:")
+        imprimir_matriz(matriz2) #Imprimimos la segunda matriz
+        
+        print("Resultado del producto de matrices:") #Aqui se multiplican las matrices
+        producto = multiplicar_matrices(matriz1, matriz2)
+        
+        if producto is not None:
+            imprimir_matriz(producto) #Imprimimos el resultado de la multiplicación
 
 ```
 
